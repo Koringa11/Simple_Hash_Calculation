@@ -29,16 +29,16 @@ def calcular_hash(nome_arquivo, algoritmo='sha256'):
 # Função para calcular hashes para vários arquivos
 def calcular_hashes_para_varios_arquivos():
     """
-    Abre uma caixa de diálogo para selecionar vários arquivos, calcula o hash para cada arquivo e exibe o resultado na área de texto.
+    Abre uma caixa de diálogo para selecionar vários arquivos, calcula o hash para cada arquivo
+    e adiciona o resultado na área de texto sem apagar os hashes já calculados.
     """
     lista_de_arquivos = filedialog.askopenfilenames(title="Selecionar arquivos")
-    resultado_text.config(state=tk.NORMAL)
-    resultado_text.delete(1.0, tk.END)  # Limpa o resultado anterior
     for nome_arquivo in lista_de_arquivos:
         hash = calcular_hash(nome_arquivo)
         if hash:
-            resultado_text.insert(tk.END, f"Hash calculado para:\n{hash}\n{nome_arquivo}")
-    resultado_text.config(state=tk.DISABLED)
+            resultado_text.config(state=tk.NORMAL)
+            resultado_text.insert(tk.END, f"Hash calculado para:\n{hash}\n{nome_arquivo}\n")
+            resultado_text.config(state=tk.DISABLED)
 
 # Função para copiar todos os hashes para a área de transferência
 def copiar_hashes():
