@@ -12,7 +12,7 @@ if sys.platform == "win32":
 exe = Executable(
     script=script,
     base=base,
-    icon="C:\\Users\\Victor\\Downloads\\teste\\Icon\\wp.ico", #Hashtag 2 icon by Icons8
+    icon="C:\\Users\\Victor\\Documents\\Faculdade\\Estágio\\Simple_Hash_Calculation\\wp.ico", #Hashtag 2 icon by Icons8
 )
 
 # Configurações para a criação do executável
