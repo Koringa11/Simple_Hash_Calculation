@@ -4,7 +4,7 @@ from cx_Freeze import setup, Executable
 # script Python principal
 script = "Calculador_de_Hash.py"
 
-# Crie um executável
+# Criar um executável
 base = None
 if sys.platform == "win32":
     base = "Win32GUI"  #"Win32GUI" para aplicação GUI no Windows
@@ -24,7 +24,7 @@ build_exe_options = {
 
 setup(
     name="CalculadoraDeHash",
-    version="1.0",
+    version="1.2",
     description="Simples calculadora de hash que utiliza o método sha256",
     options={"build_exe": build_exe_options},
     executables=[exe]
