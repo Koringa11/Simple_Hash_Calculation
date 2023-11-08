@@ -3,6 +3,7 @@ from tkinter import filedialog
 import hashlib
 import tkinter.scrolledtext as scrolledtext
 import pyperclip
+import os
 
 # Função para calcular o hash de um arquivo
 def calcular_hash(nome_arquivo, algoritmo='sha256'):
@@ -36,8 +37,9 @@ def calcular_hashes_para_varios_arquivos():
     for nome_arquivo in lista_de_arquivos:
         hash = calcular_hash(nome_arquivo)
         if hash:
+            nome_arquivo = os.path.basename(nome_arquivo)  # Obtém apenas o nome do arquivo com a extensão
             resultado_text.config(state=tk.NORMAL)
-            resultado_text.insert(tk.END, f"Hash calculado para:\n{hash}\n{nome_arquivo}\n")
+            resultado_text.insert(tk.END, f"{nome_arquivo} e Hash (SHA 256) {hash.upper()}\n\n")
             resultado_text.config(state=tk.DISABLED)
 
 # Função para copiar todos os hashes para a área de transferência
