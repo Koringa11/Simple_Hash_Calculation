@@ -12,19 +12,19 @@ if sys.platform == "win32":
 exe = Executable(
     script=script,
     base=base,
-    icon="C:\\Users\\Victor\\Documents\\Faculdade\\Estágio\\Simple_Hash_Calculation\\Icon\\wp.ico", #Hashtag 2 icon by Icons8
+    icon="C:\\Users\\Victor\\Documents\\Faculdade\\Simple_Hash_Calculation\\Icon\\wp.ico", #Hashtag 2 icon by Icons8
 )
 
 # Configurações para a criação do executável
 build_exe_options = {
-    "packages": ["hashlib", "tkinter", "pyperclip", "os"],  # Lista de pacotes usados
+    "packages": ["hashlib", "tkinter", "pyperclip", "os", "moviepy.editor", "pydub", "datetime"],  # Lista de pacotes usados
     "excludes": [],
     "include_files": [],
 }
 
 setup(
     name="CalculadoraDeHash",
-    version="1.2.3",
+    version="1.3",
     description="Simples calculadora de hash que utiliza o método sha256",
     options={"build_exe": build_exe_options},
     executables=[exe]
