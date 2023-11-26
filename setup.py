@@ -2,7 +2,7 @@ import sys
 from cx_Freeze import setup, Executable
 
 # script Python principal
-script = "Calculador_de_Hash.py"
+script = "main.py"
 
 # Criar um executável
 base = None
