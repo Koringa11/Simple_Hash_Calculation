@@ -4,6 +4,9 @@ import hashlib
 import tkinter.scrolledtext as scrolledtext
 import pyperclip
 import os
+import datetime
+from moviepy.editor import VideoFileClip
+from pydub import AudioSegment
 
 # Função para calcular o hash de um arquivo
 def calcular_hash(nome_arquivo, algoritmo='sha256'):
@@ -37,10 +40,44 @@ def calcular_hashes_para_varios_arquivos():
     for nome_arquivo in lista_de_arquivos:
         hash = calcular_hash(nome_arquivo)
         if hash:
-            nome_arquivo = os.path.basename(nome_arquivo)  # Obtém apenas o nome do arquivo com a extensão
-            resultado_text.config(state=tk.NORMAL)
-            resultado_text.insert(tk.END, f"{nome_arquivo} e Hash (SHA 256) {hash.upper()}\n")
-            resultado_text.config(state=tk.DISABLED)
+
+            #Variaveis para obter os metadados dos arquivos
+                get_name = os.path.basename(nome_arquivo)
+                get_size = os.path.getsize(nome_arquivo)
+                get_lastmodified = os.path.getmtime(nome_arquivo)
+                get_lastmodified = datetime.datetime.fromtimestamp(get_lastmodified)
+                get_lastmodified = get_lastmodified.strftime("%Y-%m-%d %H:%M:%S")
+
+                extensoes_audio = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'wma', 'alac', 'aiff', 'pcm', 'au', 'mid', 'midi', 'mp2', 
+                                   'mpa', 'mpc', 'ape', 'mac', 'ra', 'rm', 'sln', 'tta', 'aac', 'ac3', 'dts', 'eac3', 'opus', 'pcm', 'wv']
+                
+                extensoe_video = ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', 'ogg', 'mpeg', 'mpg', '3gp', 'm4v', 'vob', 'ogv', 'ts', 'mts', 'm2ts', 'asf', '.264']
+                #verificar se o arquivo é um vídeo
+                if nome_arquivo.lower().endswith(tuple(extensoe_video)):
+                    clip = VideoFileClip(nome_arquivo)
+                    duracao_segundos = clip.duration
+                    duracao_minutos = duracao_segundos / 60
+
+                    resultado_text.config(state=tk.NORMAL)
+                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_segundos:.2f} segundos ({duracao_minutos:.2f} minutos) e Hash (SHA 256) {hash.upper()}\n')
+                    resultado_text.config(state=tk.DISABLED)
+
+
+                #verificar se o arquvio é um áudio
+                elif nome_arquivo.lower().endswith(tuple(extensoes_audio)):
+                    audio = AudioSegment.from_file(nome_arquivo)
+                    duracao_segundos = len(audio) / 1000  # convertendo de milissegundos para segundos
+                    duracao_minutos = duracao_segundos / 60
+
+                    resultado_text.config(state=tk.NORMAL)
+                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_segundos:.2f} segundos ({duracao_minutos:.2f} minutos) e Hash (SHA 256) {hash.upper()}\n')
+                    resultado_text.config(state=tk.DISABLED)
+                
+                #Se for arquivo ou foto, mostrar o arquivo
+                else:
+                    resultado_text.config(state=tk.NORMAL)
+                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                    resultado_text.config(state=tk.DISABLED)
 
 # Função para copiar todos os hashes para a área de transferência
 def copiar_hashes():
