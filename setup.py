@@ -1,6 +1,8 @@
 import sys
 from cx_Freeze import setup, Executable
 
+
+
 # script Python principal
 script = "main.py"
 
@@ -17,7 +19,7 @@ exe = Executable(
 
 # Configurações para a criação do executável
 build_exe_options = {
-    "packages": ["hashlib", "tkinter", "pyperclip", "os", "moviepy.editor", "pydub", "datetime"],  # Lista de pacotes usados
+    "packages": ["hashlib", "tkinter", "pyperclip", "os", "moviepy", "pydub", "datetime",],  # Lista de pacotes usados
     "excludes": [],
     "include_files": [],
 }

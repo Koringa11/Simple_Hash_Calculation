@@ -8,6 +8,8 @@ import datetime
 from moviepy.editor import VideoFileClip
 from pydub import AudioSegment
 
+
+
 # Função para calcular o hash de um arquivo
 def calcular_hash(nome_arquivo, algoritmo='sha256'):
     """
@@ -52,6 +54,8 @@ def calcular_hashes_para_varios_arquivos():
                                    'mpa', 'mpc', 'ape', 'mac', 'ra', 'rm', 'sln', 'tta', 'aac', 'ac3', 'dts', 'eac3', 'opus', 'pcm', 'wv']
                 
                 extensoe_video = ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', 'ogg', 'mpeg', 'mpg', '3gp', 'm4v', 'vob', 'ogv', 'ts', 'mts', 'm2ts', 'asf', '.264']
+                
+
                 #verificar se o arquivo é um vídeo
                 if nome_arquivo.lower().endswith(tuple(extensoe_video)):
                     clip = VideoFileClip(nome_arquivo)
@@ -61,8 +65,9 @@ def calcular_hashes_para_varios_arquivos():
                     resultado_text.config(state=tk.NORMAL)
                     resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_segundos:.2f} segundos ({duracao_minutos:.2f} minutos) e Hash (SHA 256) {hash.upper()}\n')
                     resultado_text.config(state=tk.DISABLED)
+                    
 
-
+                
                 #verificar se o arquvio é um áudio
                 elif nome_arquivo.lower().endswith(tuple(extensoes_audio)):
                     audio = AudioSegment.from_file(nome_arquivo)
@@ -72,6 +77,7 @@ def calcular_hashes_para_varios_arquivos():
                     resultado_text.config(state=tk.NORMAL)
                     resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_segundos:.2f} segundos ({duracao_minutos:.2f} minutos) e Hash (SHA 256) {hash.upper()}\n')
                     resultado_text.config(state=tk.DISABLED)
+
                 
                 #Se for arquivo ou foto, mostrar o arquivo
                 else:
@@ -117,5 +123,7 @@ copiar_button.pack(pady=10)
 apagar_button = tk.Button(janela, text="Apagar Todos os Hashes", command=apagar_hashes)
 apagar_button.pack(pady=10)
 
+
 # Iniciar a interface gráfica
 janela.mainloop()
+
