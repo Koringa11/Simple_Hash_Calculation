@@ -6,9 +6,31 @@ import pyperclip
 import os
 import datetime
 from moviepy.editor import VideoFileClip
-from pydub import AudioSegment
+from mutagen.mp3 import MP3
+from mutagen.flac import FLAC
+from mutagen.oggvorbis import OggVorbis
+from mutagen.wavpack import WavPack
+from mutagen.aiff import AIFF
+from mutagen.oggopus import OggOpus
 
 
+
+
+def get_audio_duration(file_path):
+    supported_formats = [MP3, FLAC, OggVorbis, WavPack, AIFF, OggOpus]
+
+    for audio_format in supported_formats:
+        try:
+            audio = audio_format(file_path)
+            duration_seconds = audio.info.length
+            duration_minutes = duration_seconds / 60.0
+            return duration_minutes
+        except Exception as e:
+            # Ignora erros e tenta o próximo formato
+            pass
+
+    print("Formato de áudio não suportado ou ocorreu um erro ao tentar obter a duração.")
+    return None
 
 # Função para calcular o hash de um arquivo
 def calcular_hash(nome_arquivo, algoritmo='sha256'):
@@ -50,6 +72,11 @@ def calcular_hashes_para_varios_arquivos():
                 get_lastmodified = datetime.datetime.fromtimestamp(get_lastmodified)
                 get_lastmodified = get_lastmodified.strftime("%Y-%m-%d %H:%M:%S")
 
+
+
+
+
+
                 extensoes_audio = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'wma', 'alac', 'aiff', 'pcm', 'au', 'mid', 'midi', 'mp2', 
                                    'mpa', 'mpc', 'ape', 'mac', 'ra', 'rm', 'sln', 'tta', 'aac', 'ac3', 'dts', 'eac3', 'opus', 'pcm', 'wv']
                 
@@ -68,15 +95,16 @@ def calcular_hashes_para_varios_arquivos():
                     
 
                 
-                #verificar se o arquvio é um áudio
                 elif nome_arquivo.lower().endswith(tuple(extensoes_audio)):
-                    audio = AudioSegment.from_file(nome_arquivo)
-                    duracao_segundos = len(audio) / 1000  # convertendo de milissegundos para segundos
-                    duracao_minutos = duracao_segundos / 60
+                    duracao_minutos = get_audio_duration(nome_arquivo)
 
-                    resultado_text.config(state=tk.NORMAL)
-                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_segundos:.2f} segundos ({duracao_minutos:.2f} minutos) e Hash (SHA 256) {hash.upper()}\n')
-                    resultado_text.config(state=tk.DISABLED)
+                    if duracao_minutos is not None:
+                        resultado_text.config(state=tk.NORMAL)
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_minutos:.2f} minutos e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.config(state=tk.DISABLED)
+                    else:
+                        print("Erro ao obter duração do áudio.")
+
 
                 
                 #Se for arquivo ou foto, mostrar o arquivo
