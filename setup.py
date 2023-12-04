@@ -19,14 +19,14 @@ exe = Executable(
 
 # Configurações para a criação do executável
 build_exe_options = {
-    "packages": ["hashlib", "tkinter", "pyperclip", "os", "moviepy", "pydub", "datetime",],  # Lista de pacotes usados
+    "packages": ["hashlib", "tkinter", "pyperclip", "os", "moviepy", "datetime", "mutagen", "moviepy"],  # Lista de pacotes usados
     "excludes": [],
     "include_files": [],
 }
 
 setup(
     name="CalculadoraDeHash",
-    version="1.3",
+    version="1.3.2",
     description="Simples calculadora de hash que utiliza o método sha256",
     options={"build_exe": build_exe_options},
     executables=[exe]
