@@ -12,12 +12,15 @@ from mutagen.oggvorbis import OggVorbis
 from mutagen.wavpack import WavPack
 from mutagen.aiff import AIFF
 from mutagen.oggopus import OggOpus
-
+from mutagen.mp4 import MP4
+from mutagen.ac3 import AC3
+from mutagen.apev2 import APEv2
+from mutagen.tak import TAK
 
 
 
 def get_audio_duration(file_path):
-    supported_formats = [MP3, FLAC, OggVorbis, WavPack, AIFF, OggOpus]
+    supported_formats = [MP3, FLAC, OggVorbis, WavPack, AIFF, OggOpus, MP4, APEv2, WavPack, TAK, AC3, OggOpus]
 
     for audio_format in supported_formats:
         try:
@@ -29,7 +32,6 @@ def get_audio_duration(file_path):
             # Ignora erros e tenta o próximo formato
             pass
 
-    print("Formato de áudio não suportado ou ocorreu um erro ao tentar obter a duração.")
     return None
 
 # Função para calcular o hash de um arquivo
@@ -72,15 +74,10 @@ def calcular_hashes_para_varios_arquivos():
                 get_lastmodified = datetime.datetime.fromtimestamp(get_lastmodified)
                 get_lastmodified = get_lastmodified.strftime("%Y-%m-%d %H:%M:%S")
 
-
-
-
-
-
                 extensoes_audio = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'wma', 'alac', 'aiff', 'pcm', 'au', 'mid', 'midi', 'mp2', 
                                    'mpa', 'mpc', 'ape', 'mac', 'ra', 'rm', 'sln', 'tta', 'aac', 'ac3', 'dts', 'eac3', 'opus', 'pcm', 'wv']
                 
-                extensoe_video = ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', 'ogg', 'mpeg', 'mpg', '3gp', 'm4v', 'vob', 'ogv', 'ts', 'mts', 'm2ts', 'asf', '.264']
+                extensoe_video = ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', 'mpeg', 'mpg', '3gp', 'm4v', 'vob', 'ts', 'mts', 'm2ts', 'asf', '.264']
                 
 
                 #verificar se o arquivo é um vídeo
@@ -90,11 +87,9 @@ def calcular_hashes_para_varios_arquivos():
                     duracao_minutos = duracao_segundos / 60
 
                     resultado_text.config(state=tk.NORMAL)
-                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_segundos:.2f} segundos ({duracao_minutos:.2f} minutos) e Hash (SHA 256) {hash.upper()}\n')
+                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_minutos:.2f} minutos e Hash (SHA 256) {hash.upper()}\n')
                     resultado_text.config(state=tk.DISABLED)
                     
-
-                
                 elif nome_arquivo.lower().endswith(tuple(extensoes_audio)):
                     duracao_minutos = get_audio_duration(nome_arquivo)
 
