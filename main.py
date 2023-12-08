@@ -5,6 +5,7 @@ import tkinter.scrolledtext as scrolledtext
 import pyperclip
 import os
 import datetime
+from math import ceil
 from moviepy.editor import VideoFileClip
 from mutagen.mp3 import MP3
 from mutagen.flac import FLAC
@@ -15,19 +16,20 @@ from mutagen.oggopus import OggOpus
 from mutagen.ac3 import AC3
 from mutagen.apev2 import APEv2
 from mutagen.tak import TAK
+from mutagen.wave import WAVE as WAV
 
 
 
 
-def get_audio_duration(file_path):
-    supported_formats = [MP3, FLAC, OggVorbis, WavPack, AIFF, OggOpus, APEv2, WavPack, TAK, AC3, OggOpus]
+def obter_duração_audio(file_path):
+    formatos_suportados = [MP3, FLAC, OggVorbis, WAV, WavPack, AIFF, OggOpus, APEv2, WavPack, TAK, AC3, OggOpus]
 
-    for audio_format in supported_formats:
+    for audio_format in formatos_suportados:
         try:
             audio = audio_format(file_path)
-            duration_seconds = audio.info.length
-            duration_minutes = duration_seconds / 60.0
-            return duration_minutes
+            duracao_segundos_audio = audio.info.length
+            comprimento_audio = formatar_comprimento(duracao_segundos_audio)
+            return comprimento_audio
         except Exception as e:
             # Ignora erros e tenta o próximo formato
             pass
@@ -85,35 +87,31 @@ def calcular_hashes_para_varios_arquivos():
                     try:
                         clip = VideoFileClip(nome_arquivo)
                         duracao_segundos = clip.duration
-                        comprimento = formatar_comprimento(duracao_segundos)
+                        comprimento_video = formatar_comprimento(duracao_segundos)
                         resultado_text.config(state=tk.NORMAL)
-                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {comprimento} minutos e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_video} minutos e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
                     except Exception:
                         resultado_text.config(state=tk.NORMAL)
-                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
 
 
-
-                    
-                    
                 elif nome_arquivo.lower().endswith(tuple(extensoes_audio)):
-                    duracao_minutos = get_audio_duration(nome_arquivo)
+                    comprimento_audio = obter_duração_audio(nome_arquivo)
 
-                    if duracao_minutos is not None:
+                    if comprimento_audio is not None:
                         resultado_text.config(state=tk.NORMAL)
-                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_minutos:.2f} minutos e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_audio} minutos e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
                     else:
                         print("Erro ao obter duração do áudio.")
 
 
-                
                 #Se for arquivo ou foto, mostrar o arquivo
                 else:
                     resultado_text.config(state=tk.NORMAL)
-                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
                     resultado_text.config(state=tk.DISABLED)
 
 # Função para formatar o comprimento do arquivo
