@@ -5,6 +5,7 @@ import tkinter.scrolledtext as scrolledtext
 import pyperclip
 import os
 import datetime
+from math import ceil
 from moviepy.editor import VideoFileClip
 from mutagen.mp3 import MP3
 from mutagen.flac import FLAC
@@ -12,22 +13,23 @@ from mutagen.oggvorbis import OggVorbis
 from mutagen.wavpack import WavPack
 from mutagen.aiff import AIFF
 from mutagen.oggopus import OggOpus
-from mutagen.mp4 import MP4
 from mutagen.ac3 import AC3
 from mutagen.apev2 import APEv2
 from mutagen.tak import TAK
+from mutagen.wave import WAVE as WAV
 
 
 
-def get_audio_duration(file_path):
-    supported_formats = [MP3, FLAC, OggVorbis, WavPack, AIFF, OggOpus, MP4, APEv2, WavPack, TAK, AC3, OggOpus]
 
-    for audio_format in supported_formats:
+def obter_duração_audio(file_path):
+    formatos_suportados = [MP3, FLAC, OggVorbis, WAV, WavPack, AIFF, OggOpus, APEv2, WavPack, TAK, AC3, OggOpus]
+
+    for audio_format in formatos_suportados:
         try:
             audio = audio_format(file_path)
-            duration_seconds = audio.info.length
-            duration_minutes = duration_seconds / 60.0
-            return duration_minutes
+            duracao_segundos_audio = audio.info.length
+            comprimento_audio = formatar_comprimento(duracao_segundos_audio)
+            return comprimento_audio
         except Exception as e:
             # Ignora erros e tenta o próximo formato
             pass
@@ -77,36 +79,49 @@ def calcular_hashes_para_varios_arquivos():
                 extensoes_audio = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'wma', 'alac', 'aiff', 'pcm', 'au', 'mid', 'midi', 'mp2', 
                                    'mpa', 'mpc', 'ape', 'mac', 'ra', 'rm', 'sln', 'tta', 'aac', 'ac3', 'dts', 'eac3', 'opus', 'pcm', 'wv']
                 
-                extensoe_video = ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', 'mpeg', 'mpg', '3gp', 'm4v', 'vob', 'ts', 'mts', 'm2ts', 'asf', '.264']
+                extensoe_video = ["mp4", 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', 'mpeg', 'mpg', '3gp', 'm4v', 'vob', 'ts', 'mts', 'm2ts', 'asf', '.264']
                 
 
                 #verificar se o arquivo é um vídeo
                 if nome_arquivo.lower().endswith(tuple(extensoe_video)):
-                    clip = VideoFileClip(nome_arquivo)
-                    duracao_segundos = clip.duration
-                    duracao_minutos = duracao_segundos / 60
-
-                    resultado_text.config(state=tk.NORMAL)
-                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_minutos:.2f} minutos e Hash (SHA 256) {hash.upper()}\n')
-                    resultado_text.config(state=tk.DISABLED)
-                    
-                elif nome_arquivo.lower().endswith(tuple(extensoes_audio)):
-                    duracao_minutos = get_audio_duration(nome_arquivo)
-
-                    if duracao_minutos is not None:
+                    try:
+                        clip = VideoFileClip(nome_arquivo)
+                        duracao_segundos = clip.duration
+                        comprimento_video = formatar_comprimento(duracao_segundos)
                         resultado_text.config(state=tk.NORMAL)
-                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified}, Duração: {duracao_minutos:.2f} minutos e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_video} minutos e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.config(state=tk.DISABLED)
+                    except Exception:
+                        resultado_text.config(state=tk.NORMAL)
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.config(state=tk.DISABLED)
+
+
+                elif nome_arquivo.lower().endswith(tuple(extensoes_audio)):
+                    comprimento_audio = obter_duração_audio(nome_arquivo)
+
+                    if comprimento_audio is not None:
+                        resultado_text.config(state=tk.NORMAL)
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_audio} minutos e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
                     else:
                         print("Erro ao obter duração do áudio.")
 
 
-                
                 #Se for arquivo ou foto, mostrar o arquivo
                 else:
                     resultado_text.config(state=tk.NORMAL)
-                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {get_size/(1024):.0f} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
                     resultado_text.config(state=tk.DISABLED)
+
+# Função para formatar o comprimento do arquivo
+def formatar_comprimento(sec):
+    sec = sec % (24 * 3600)
+    hour = sec // 3600
+    sec %= 3600
+    min = sec // 60
+    sec %= 60
+    return "%02d:%02d:%02d" % (hour, min, sec)
 
 # Função para copiar todos os hashes para a área de transferência
 def copiar_hashes():
