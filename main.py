@@ -89,7 +89,7 @@ def calcular_hashes_para_varios_arquivos():
                         duracao_segundos = clip.duration
                         comprimento_video = formatar_comprimento(duracao_segundos)
                         resultado_text.config(state=tk.NORMAL)
-                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_video} minutos e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_video} e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
                     except Exception:
                         resultado_text.config(state=tk.NORMAL)
@@ -102,7 +102,7 @@ def calcular_hashes_para_varios_arquivos():
 
                     if comprimento_audio is not None:
                         resultado_text.config(state=tk.NORMAL)
-                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_audio} minutos e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_audio} e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
                     else:
                         print("Erro ao obter duração do áudio.")
@@ -114,6 +114,12 @@ def calcular_hashes_para_varios_arquivos():
                     resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
                     resultado_text.config(state=tk.DISABLED)
 
+
+
+def verificar_unidade(hour, min, sec):
+    if sec != 0:
+        return '%02d' % (hour) +' Horas ' +'%02d' % (min) +' Minutos e ' '%02d' % (sec) +' Segundos'
+
 # Função para formatar o comprimento do arquivo
 def formatar_comprimento(sec):
     sec = sec % (24 * 3600)
@@ -121,7 +127,7 @@ def formatar_comprimento(sec):
     sec %= 3600
     min = sec // 60
     sec %= 60
-    return "%02d:%02d:%02d" % (hour, min, sec)
+    return verificar_unidade(hour, min, sec)
 
 # Função para copiar todos os hashes para a área de transferência
 def copiar_hashes():
