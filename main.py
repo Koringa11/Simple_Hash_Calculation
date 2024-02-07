@@ -105,7 +105,9 @@ def calcular_hashes_para_varios_arquivos():
                         resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_audio} e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
                     else:
-                        print("Erro ao obter duração do áudio.")
+                        resultado_text.config(state=tk.NORMAL)
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.config(state=tk.DISABLED)
 
 
                 #Se for arquivo ou foto, mostrar o arquivo
