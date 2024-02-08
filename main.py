@@ -17,12 +17,13 @@ from mutagen.ac3 import AC3
 from mutagen.apev2 import APEv2
 from mutagen.tak import TAK
 from mutagen.wave import WAVE as WAV
+from tinytag import TinyTag
 
 
 
 
 def obter_duração_audio(file_path):
-    formatos_suportados = [MP3, FLAC, OggVorbis, WAV, WavPack, AIFF, OggOpus, APEv2, WavPack, TAK, AC3, OggOpus]
+    formatos_suportados = [MP3, FLAC, OggVorbis, WAV, WavPack, AIFF, OggOpus, APEv2, WavPack, TAK, AC3, OggOpus, 'M4A']
 
     for audio_format in formatos_suportados:
         try:
@@ -92,9 +93,10 @@ def calcular_hashes_para_varios_arquivos():
                         resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_video} e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
                     except Exception:
-                        resultado_text.config(state=tk.NORMAL)
-                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
-                        resultado_text.config(state=tk.DISABLED)
+                            resultado_text.config(state=tk.NORMAL)
+                            resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                            resultado_text.config(state=tk.DISABLED)
+
 
 
                 elif nome_arquivo.lower().endswith(tuple(extensoes_audio)):
@@ -105,9 +107,17 @@ def calcular_hashes_para_varios_arquivos():
                         resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_audio} e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
                     else:
-                        resultado_text.config(state=tk.NORMAL)
-                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
-                        resultado_text.config(state=tk.DISABLED)
+                        try:
+                            audio = TinyTag.get(nome_arquivo)
+                            audio = audio.duration
+                            comprimento_audio = formatar_comprimento(audio)
+                            resultado_text.config(state=tk.NORMAL)
+                            resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_audio} e Hash (SHA 256) {hash.upper()}\n')
+                            resultado_text.config(state=tk.DISABLED)
+                        except:
+                            resultado_text.config(state=tk.NORMAL)
+                            resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                            resultado_text.config(state=tk.DISABLED)
 
 
                 #Se for arquivo ou foto, mostrar o arquivo
@@ -120,7 +130,7 @@ def calcular_hashes_para_varios_arquivos():
 
 def verificar_unidade(hour, min, sec):
     if sec != 0:
-        return '%02d' % (hour) +' Horas ' +'%02d' % (min) +' Minutos e ' '%02d' % (sec) +' Segundos'
+        return '%02d' % (hour) +' Hora(s) ' +'%02d' % (min) +' Minuto(s) e ' '%02d' % (sec) +' Segundo(s)'
 
 # Função para formatar o comprimento do arquivo
 def formatar_comprimento(sec):
