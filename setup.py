@@ -19,7 +19,7 @@ exe = Executable(
 
 # Configurações para a criação do executável
 build_exe_options = {
-    "packages": ["hashlib", "tkinter", "pyperclip", "os", "datetime", "mutagen", "moviepy", "math", "TinyTag"],  # Lista de pacotes usados
+    "packages": ["hashlib", "tkinter", "pyperclip", "os", "datetime", "mutagen", "moviepy", "math"],  # Lista de pacotes usados
     "excludes": [],
     "include_files": [],
 }
