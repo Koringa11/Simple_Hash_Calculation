@@ -4,7 +4,6 @@ import hashlib
 import tkinter.scrolledtext as scrolledtext
 import pyperclip
 import os
-import datetime
 from math import ceil
 from moviepy.editor import VideoFileClip
 from mutagen.mp3 import MP3
