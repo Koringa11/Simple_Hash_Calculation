@@ -73,9 +73,6 @@ def calcular_hashes_para_varios_arquivos():
             #Variaveis para obter os metadados dos arquivos
                 get_name = os.path.basename(nome_arquivo)
                 get_size = os.path.getsize(nome_arquivo)
-                get_lastmodified = os.path.getmtime(nome_arquivo)
-                get_lastmodified = datetime.datetime.fromtimestamp(get_lastmodified)
-                get_lastmodified = get_lastmodified.strftime("%Y-%m-%d %H:%M:%S")
 
                 extensoes_audio = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'wma', 'alac', 'aiff', 'pcm', 'au', 'mid', 'midi', 'mp2', 
                                    'mpa', 'mpc', 'ape', 'mac', 'ra', 'rm', 'sln', 'tta', 'aac', 'ac3', 'dts', 'eac3', 'opus', 'pcm', 'wv']
@@ -90,11 +87,11 @@ def calcular_hashes_para_varios_arquivos():
                         duracao_segundos = clip.duration
                         comprimento_video = formatar_comprimento(duracao_segundos)
                         resultado_text.config(state=tk.NORMAL)
-                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_video} e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Duração: {comprimento_video} e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
                     except Exception:
                             resultado_text.config(state=tk.NORMAL)
-                            resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                            resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, e Hash (SHA 256) {hash.upper()}\n')
                             resultado_text.config(state=tk.DISABLED)
 
 
@@ -104,7 +101,7 @@ def calcular_hashes_para_varios_arquivos():
 
                     if comprimento_audio is not None:
                         resultado_text.config(state=tk.NORMAL)
-                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_audio} e Hash (SHA 256) {hash.upper()}\n')
+                        resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Duração: {comprimento_audio} e Hash (SHA 256) {hash.upper()}\n')
                         resultado_text.config(state=tk.DISABLED)
                     else:
                         try:
@@ -112,18 +109,18 @@ def calcular_hashes_para_varios_arquivos():
                             audio = audio.duration
                             comprimento_audio = formatar_comprimento(audio)
                             resultado_text.config(state=tk.NORMAL)
-                            resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified}, Duração: {comprimento_audio} e Hash (SHA 256) {hash.upper()}\n')
+                            resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB,  Duração: {comprimento_audio} e Hash (SHA 256) {hash.upper()}\n')
                             resultado_text.config(state=tk.DISABLED)
                         except:
                             resultado_text.config(state=tk.NORMAL)
-                            resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                            resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, e Hash (SHA 256) {hash.upper()}\n')
                             resultado_text.config(state=tk.DISABLED)
 
 
                 #Se for arquivo ou foto, mostrar o arquivo
                 else:
                     resultado_text.config(state=tk.NORMAL)
-                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, Modificado em: {get_lastmodified} e Hash (SHA 256) {hash.upper()}\n')
+                    resultado_text.insert(tk.END, f'Nome do arquivo: {get_name}, Tamanho: {ceil(get_size/(1024))} KB, e Hash (SHA 256) {hash.upper()}\n')
                     resultado_text.config(state=tk.DISABLED)
 
 
